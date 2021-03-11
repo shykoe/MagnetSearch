@@ -26,6 +26,7 @@ func BuildSearchService(dao *dao.TorrentDaoImpl) gin.HandlerFunc {
 		result.PageSize = size
 		result.Count = int(count)
 		result.Torrent = torrents
+		result.CurrentPage = pos
 		// build link
 		var urls []string
 		for _, item := range torrents {
