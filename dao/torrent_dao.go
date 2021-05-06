@@ -54,6 +54,13 @@ func (t TorrentDaoImpl) FindTorrents(content string, CurrentPage int32, pageSize
 				},
 			},
 		},
+		"sort": []interface{}{
+			map[string]interface{}{
+				"DiscoverTime": map[string]interface{}{
+					"order":"desc",
+				},
+			},
+		},
 		"size":             pageSize,
 		"from":             (CurrentPage - 1) * pageSize,
 		"track_total_hits": "true",
