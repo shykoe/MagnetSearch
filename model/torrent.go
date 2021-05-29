@@ -23,7 +23,7 @@ func ParseTorrents(content map[string]interface{})([]*Torrent, error){
 		instance.InfoHash = source["Hash"].(string)
 		instance.DiscoverFrom = source["DiscoverFrom"].(string)
 		instance.Name = source["Name"].(string)
-		instance.DiscoverTime, _ = time.Parse("2006-01-02T15:04:05Z0700", source["DiscoverTime"].(string))
+		instance.DiscoverTime, _ = time.Parse(time.RFC3339, source["DiscoverTime"].(string))
 		instance.Length = int64(source["Length"].(float64))
 		var files []*TorrentFile
 		for _, item := range source["Files"].([]interface{}){
