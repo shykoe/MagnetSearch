@@ -31,24 +31,10 @@ func (t TorrentDaoImpl) FindTorrents(content string, CurrentPage int32, pageSize
 			"bool": map[string]interface{}{
 				"should": []interface{}{
 					map[string]interface{}{
-						"nested": map[string]interface{}{
-							"path": "Files",
-							"query": map[string]interface{}{
-								"bool": map[string]interface{}{
-									"filter": []interface{}{
-										map[string]interface{}{
-											"match_phrase": map[string]interface{}{
-												"Files.Name": "*" + content + "*",
-											},
-										},
-									},
-								},
-							},
-						},
-					},
-					map[string]interface{}{
-						"match_phrase": map[string]interface{}{
-							"Name": "*" + content + "*",
+						"multi_match": map[string]interface{}{
+							"type":    "best_fields",
+							"lenient": true,
+							"query":   content,
 						},
 					},
 				},
@@ -57,7 +43,7 @@ func (t TorrentDaoImpl) FindTorrents(content string, CurrentPage int32, pageSize
 		"sort": []interface{}{
 			map[string]interface{}{
 				"DiscoverTime": map[string]interface{}{
-					"order":"desc",
+					"order": "desc",
 				},
 			},
 		},
@@ -83,6 +69,7 @@ func (t TorrentDaoImpl) FindTorrents(content string, CurrentPage int32, pageSize
 		log.Errorf("Error parsing the response body: %s", err)
 		return nil, 0, err
 	}
+	log.Infof("res : %v+", r)
 	size := r["hits"].(map[string]interface{})["total"].(map[string]interface{})["value"].(float64)
 	torrents, err := model.ParseTorrents(r)
 	if err != nil {
